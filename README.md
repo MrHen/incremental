@@ -1,2 +1,0 @@
-# incremental
-Basic incremental
