@@ -2,6 +2,6 @@
 var should = require("should");
 describe('hello', function () {
     it('world', function () {
-        should.exist(null);
+        should.not.exist(null);
     });
 });
