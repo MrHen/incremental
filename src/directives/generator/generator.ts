@@ -2,7 +2,7 @@
 
 module Generator {
     var app = angular
-        .module("incremental", [])
+        .module("incremental.generator", [])
         .directive('generator', () => new GeneratorDirective())
         .controller("GeneratorController", GeneratorController);
 
@@ -18,6 +18,7 @@ module Generator {
             this.templateUrl = 'directives/generator/generator.html';
             this.restrict = 'E';
             this.scope = {
+                text: "=",
                 value: "="
             };
             this.controller = GeneratorController;
@@ -27,6 +28,7 @@ module Generator {
     }
 
     export class GeneratorController {
+        public text: string;
         public value: number;
 
         public generate() {
