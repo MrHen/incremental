@@ -1,11 +1,13 @@
 var del = require('del');
 var gulp = require('gulp');
 var gulp_bower = require('gulp-bower');
+var gulp_changed = require('gulp-changed');
 var gulp_gh_pages = require('gulp-gh-pages');
 var gulp_filter = require("gulp-filter");
 var gulp_spawn_mocha = require('gulp-spawn-mocha');
 var gulp_tsd = require('gulp-tsd');
 var gulp_typescript = require('gulp-typescript');
+var gulp_util = require('gulp-util');
 var gulp_nodemon = require('gulp-nodemon');
 var run_sequence = require('run-sequence');
 
@@ -22,15 +24,25 @@ var configs = {
         noEmitOnError: true,
         module: 'commonjs',
         target: 'ES5'
+    },
+
+    watcher: {
+        interval: 5000
     }
 };
 
 var locations = {
     sources: "src/**",
+
     output: "app",
     test: "app/**/*.spec.js",
     deploy: "app/**/*",
     start: "app/app.js",
+
+    filters: {
+        copy: ['**/*.{html,css}'],
+        typescript: ['**/*.ts', '!**/*.spec.ts']
+    },
 
     watch: {
         restart: ["app/**/*"]
@@ -62,6 +74,17 @@ gulp.task('clean:tsd', function (callback) {
 });
 
 ////////
+// Watch
+////////
+
+gulp.task('watch', ['build:app'], function() {
+    return gulp.watch(locations.sources, configs.watcher, ['build:app:typescript', 'build:app:copy'])
+        .on('change', function (event) {
+            gulp_util.log("[" + gulp_util.colors.cyan("watch") + "]", 'File ' + event.path + ' was ' + event.type);
+        });
+});
+
+////////
 // Build
 ////////
 
@@ -74,28 +97,23 @@ gulp.task('build:app', ['build:tsd', 'build:bower'], function(callback) {
 });
 
 gulp.task('build:app:copy', function() {
-    var copyFilter = gulp_filter(['**/*.{html,css}']);
+    var copyFilter = gulp_filter(locations.filters.copy);
 
     return gulp.src(locations.sources)
         .pipe(copyFilter)
+        .pipe(gulp_changed(locations.output))
         .pipe(gulp.dest(locations.output));
 });
 
-gulp.task('build:app:typescript', function () {
-    var tsFilter = gulp_filter(['**/*.ts', '!**/*.spec.ts']); // non-test TypeScript files
+var tsProject = gulp_typescript.createProject(configs.typescript);
 
-    var errors = false;
+gulp.task('build:app:typescript', function () {
+    var tsFilter = gulp_filter(locations.filters.typescript); // non-test TypeScript files
+
     var tsResult = gulp.src(locations.sources)
+        .pipe(gulp_changed(locations.output, {extension: '.js'}))
         .pipe(tsFilter)
-        .pipe(gulp_typescript(configs.typescript))
-        .on('error', function() {
-            errors = true;
-        })
-        .on('end', function() {
-            if (errors) {
-                process.exit(1);
-            }
-        });
+        .pipe(gulp_typescript(tsProject));
 
     return tsResult.js.pipe(gulp.dest(locations.output));
 });
