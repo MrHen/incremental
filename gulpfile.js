@@ -27,7 +27,7 @@ var configs = {
     },
 
     watcher: {
-        interval: 5000
+        interval: 1000
     }
 };
 
@@ -143,8 +143,7 @@ gulp.task('build:test:typescript', function () {
 });
 
 gulp.task('build:bower', function () {
-    return gulp_bower()
-        .pipe(gulp.dest(locations.bower));
+    return gulp_bower().pipe(gulp.dest(locations.bower));
 });
 
 gulp.task('build:tsd', function (callback) {
