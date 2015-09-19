@@ -6,13 +6,16 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/app.css">
     <script src="bower_components/angular/angular.js"></script>
+    <script src="directives/directives.js"></script>
     <script src="directives/generator/generator.js"></script>
+    <script src="directives/resourceList/resourceList.js"></script>
+    <script src="index.js"></script>
 </head>
-<body>
+<body class="container-fluid">
 
 <h1>Basics</h1>
 <div class="row">
-    <generator value="0"/>
+    <resourceList class="col-md-8" resources="{'scrap':0}"/>
 </div>
 
 </body>

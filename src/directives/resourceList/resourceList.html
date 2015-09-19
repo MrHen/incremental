@@ -1,0 +1,12 @@
+<table class="table table-bordered">
+    <tr>
+        <th>Resource</th>
+        <th>Owned</th>
+        <th>Actions</th>
+    </tr>
+    <tr ng-repeat="(key, value) in vm.resources">
+        <td class="lead">{{key}}</td>
+        <td class="lead">{{value}}</td>
+        <td><generator text="'collect'" value="value"/></td>
+    </tr>
+</table>
