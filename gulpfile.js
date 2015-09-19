@@ -38,6 +38,7 @@ var locations = {
     test: "app/**/*.spec.js",
     deploy: "app/**/*",
     start: "app/app.js",
+    bower: "app/bower_components",
 
     filters: {
         copy: ['**/*.{html,css}'],
@@ -50,7 +51,7 @@ var locations = {
 };
 
 ////////
-// CLEAN
+// Clean
 ////////
 
 gulp.task('clean', function(callback) {
@@ -142,7 +143,8 @@ gulp.task('build:test:typescript', function () {
 });
 
 gulp.task('build:bower', function () {
-    return gulp_bower();
+    return gulp_bower()
+        .pipe(gulp.dest(locations.bower));
 });
 
 gulp.task('build:tsd', function (callback) {
