@@ -1,15 +1,19 @@
 <!doctype html>
-<html lang="en" ng-app>
+<html lang="en" data-ng-app="incremental">
 <head>
     <meta charset="utf-8">
     <title>My HTML File</title>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/app.css">
     <script src="bower_components/angular/angular.js"></script>
+    <script src="controllers/generator.js"></script>
 </head>
 <body>
 
-<p>Nothing here {{'yet' + '!'}}</p>
+<h1>Basics</h1>
+<div class="row" ng-controller="GeneratorController">
+    <button class="btn btn-default col-md-4" ng-click="generate()">{{value}}</button>
+</div>
 
 </body>
 </html>
