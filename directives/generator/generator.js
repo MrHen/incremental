@@ -19,30 +19,12 @@ var Generator;
         return GeneratorDirective;
     })();
     Generator.GeneratorDirective = GeneratorDirective;
-    //export function generatorDirective() {
-    //    return {
-    //        templateUrl: 'directives/generator/generator.html',
-    //        restrict: 'E',
-    //        scope: {
-    //            value: "="
-    //        },
-    //        controller: GeneratorController,
-    //        controllerAs: "vm",
-    //        bindToController: true
-    //    };
-    //}
-    //
     var GeneratorController = (function () {
         function GeneratorController() {
-            //$scope.value = 0;
-            //$scope.generate = () => {
-            //    $scope.value++;
-            //}
         }
         GeneratorController.prototype.generate = function () {
             this.value++;
         };
-        GeneratorController.$inject = ['$scope'];
         return GeneratorController;
     })();
     Generator.GeneratorController = GeneratorController;
