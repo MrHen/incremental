@@ -6,6 +6,7 @@ var gulp_filter = require("gulp-filter");
 var gulp_spawn_mocha = require('gulp-spawn-mocha');
 var gulp_tsd = require('gulp-tsd');
 var gulp_typescript = require('gulp-typescript');
+var gulp_nodemon = require('gulp-nodemon');
 var run_sequence = require('run-sequence');
 
 var configs = {
@@ -28,7 +29,12 @@ var locations = {
     sources: "src/**",
     output: "app",
     test: "app/**/*.spec.js",
-    deploy: "app/**/*"
+    deploy: "app/**/*",
+    start: "app/app.js",
+
+    watch: {
+        restart: ["app/**/*"]
+    }
 };
 
 ////////
@@ -123,6 +129,25 @@ gulp.task('build:bower', function () {
 
 gulp.task('build:tsd', function (callback) {
     return gulp_tsd(configs.tsd, callback);
+});
+
+//////
+// Run
+//////
+
+gulp.task('start', ['build:app'], function(callback) {
+    run_sequence('start:app', callback);
+});
+
+gulp.task('start:app', function() {
+    gulp_nodemon({
+        script: locations.start,
+        env: {
+            NODE_ENV: process.env.NODE_ENV
+        },
+        watch: locations.watch.restart,
+        verbose: true
+    });
 });
 
 /////////
