@@ -33,12 +33,15 @@ var Generator;
     //}
     //
     var GeneratorController = (function () {
-        function GeneratorController($scope) {
-            $scope.value = 0;
-            $scope.generate = function () {
-                $scope.value++;
-            };
+        function GeneratorController() {
+            //$scope.value = 0;
+            //$scope.generate = () => {
+            //    $scope.value++;
+            //}
         }
+        GeneratorController.prototype.generate = function () {
+            this.value++;
+        };
         GeneratorController.$inject = ['$scope'];
         return GeneratorController;
     })();
