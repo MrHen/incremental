@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/app.css">
     <script src="bower_components/angular/angular.js"></script>
     <script src="directives/directives.js"></script>
+    <script src="directives/converter/converter.js"></script>
     <script src="directives/generator/generator.js"></script>
     <script src="directives/resourceList/resourceList.js"></script>
     <script src="index.js"></script>
@@ -15,7 +16,28 @@
 
 <h1>Basics</h1>
 <div class="row">
-    <resourceList class="col-md-8" resources="{'scrap':0}"/>
+    <div class="col-md-8">
+        <resourceList resources="resources"></resourceList>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <th>Action</th>
+                <th>Effect</th>
+            </tr>
+            <tr>
+                <td><generator text="'collect'" value="resources.scrap"></generator></td>
+                <td>+1 Scrap</td>
+            </tr>
+            <tr>
+                <td><converter text="'convert'" source="resources.scrap" dest="resources.junk"></converter></td>
+                <td>-1 Scrap, +1 Junk</td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 </body>
