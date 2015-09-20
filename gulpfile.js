@@ -32,7 +32,7 @@ var configs = {
 };
 
 var locations = {
-    sources: "src/**",
+    sources: "src/**/*",
 
     output: "app",
     test: "app/**/*.spec.js",
