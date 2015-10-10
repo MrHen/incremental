@@ -1,6 +1,6 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
-var app = angular
+angular
     .module("incremental.services", [
-        'incremental.dataStore'
+        "incremental.dataStore"
     ]);

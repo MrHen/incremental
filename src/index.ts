@@ -2,8 +2,6 @@
 /// <reference path="./services/dataStore/dataStore.service.ts" />
 
 namespace IncrementalApp {
-    "use strict";
-
     export interface IncrementalScope {
         resources: {[resource:string]:number};
     }
