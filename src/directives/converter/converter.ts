@@ -1,6 +1,15 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
 namespace Converter {
+    export interface ConverterAmount {
+        resource:string;
+        count:number;
+    }
+
+    export interface ConverterData {
+        [resource:string]: number;
+    }
+
     export class ConverterDirective implements ng.IDirective {
         public templateUrl: string;
         public restrict: string;
@@ -13,8 +22,8 @@ namespace Converter {
             this.templateUrl = "directives/converter/converter.html";
             this.restrict = "E";
             this.scope = {
+                data: "=",
                 dest: "=",
-                ratio: "=",
                 source: "=",
                 text: "="
             };
@@ -25,24 +34,22 @@ namespace Converter {
     }
 
     export class ConverterController {
-        public dest: number;
-        public source: number;
-        public ratio: number;
+        public data: ConverterData;
+        public dest: ConverterAmount[];
+        public source: ConverterAmount[];
         public text: string;
 
         public convert() {
-            let sourceRatio = this.ratio && this.ratio > 0 ? this.ratio : 1;
-            let destRatio = 1;
+            let rejected = _.reject(this.source, source => this.data[source.resource] >= source.count);
 
-            if (sourceRatio < 1) {
-                destRatio = sourceRatio / 1;
-                sourceRatio = 1;
+            // TODO real warning system
+            if (!_.isEmpty(rejected)) {
+                console.log("not enough resources", rejected);
+                return;
             }
 
-            if (this.source >= sourceRatio) {
-                this.source -= sourceRatio;
-                this.dest += destRatio;
-            }
+            _.each(this.source, source => this.data[source.resource] = (this.data[source.resource] || 0) - source.count);
+            _.each(this.dest, dest => this.data[dest.resource] = (this.data[dest.resource] || 0) + dest.count);
         }
     }
 

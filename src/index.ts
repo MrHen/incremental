@@ -16,7 +16,7 @@ namespace IncrementalApp {
                 "scrapbot": 0
             };
 
-            if (this.dataStore.current == {}) {
+            if (_.isEmpty(this.dataStore.current)) {
                 this.dataStore.current = starterKit;
             }
 
