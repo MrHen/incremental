@@ -35,21 +35,9 @@
                 <td><generator text="'collect'" value="resources.scrap"></generator></td>
                 <td>+1 Scrap</td>
             </tr>
-            <tr>
-                <td><converter text="'convert'" data="resources" source="[{resource:'scrap', count:2}]" dest="[{resource:'junk', count:1}]"></converter></td>
-                <td>-1 Scrap, +1 Junk</td>
-            </tr>
-            <tr>
-                <td><converter text="'build'" data="resources" source="[{resource:'junk', count:5}]" dest="[{resource:'scrapbot', count:1}]"></converter></td>
-                <td>-5 Junk, +1 Scrapbot</td>
-            </tr>
-            <tr>
-                <td><converter text="'harvest'" data="resources" source="[{resource:'scrapbot', count:1}]" dest="[{resource:'fuel', count:30}]"></converter></td>
-                <td>-1 Scrapbot, +30 Fuel</td>
-            </tr>
-            <tr>
-                <td><converter text="'mine'" data="resources" source="[{resource:'scrapbot', count:1}, {resource:'fuel', count:1}]" dest="[{resource:'scrap', count:30}]"></converter></td>
-                <td>-1 Scrapbot, -1 Fuel, +30 Scrap</td>
+            <tr ng-repeat="converter in converters">
+                <td><converter text="converter.name" data="resources" source="converter.cost" dest="converter.gain"></converter></td>
+                <td ng-bind="converter.description"></td>
             </tr>
         </table>
     </div>
