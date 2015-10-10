@@ -36,8 +36,12 @@
                 <td>+1 Scrap</td>
             </tr>
             <tr>
-                <td><converter text="'convert'" source="resources.scrap" dest="resources.junk"></converter></td>
+                <td><converter text="'convert'" source="resources.scrap" dest="resources.junk" ratio="2"></converter></td>
                 <td>-1 Scrap, +1 Junk</td>
+            </tr>
+            <tr>
+                <td><converter text="'build'" source="resources.junk" dest="resources.scrapbot" ratio="5"></converter></td>
+                <td>-5 Junk, +1 Scrapbot</td>
             </tr>
         </table>
     </div>

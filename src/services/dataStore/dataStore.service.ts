@@ -18,10 +18,7 @@ namespace DataStore {
 
     export class MemoryDataStoreService implements DataStoreService {
         public tickCount:number = 0;
-        public current: DataSnapshot = {
-            "scrap": 2,
-            "junk": 0
-        };
+        public current:DataSnapshot = {};
 
         public tick(next:DataSnapshot, count:number = 1):void {
             this.tickCount += count;

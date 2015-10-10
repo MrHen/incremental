@@ -9,12 +9,18 @@ namespace IncrementalApp {
     export class IncrementalController {
         public static $inject:string[] = ["$scope", "dataStore"];
 
-        public scope:IncrementalScope;
-
         constructor(private $scope:IncrementalScope, private dataStore:DataStore.DataStoreService) {
-            this.scope = $scope;
+            let starterKit:DataStore.DataSnapshot = {
+                "scrap": 2,
+                "junk": 0,
+                "scrapbot": 0
+            };
 
-            $scope.resources = dataStore.current;
+            if (this.dataStore.current == {}) {
+                this.dataStore.current = starterKit;
+            }
+
+            this.$scope.resources = this.dataStore.current;
         }
     }
 

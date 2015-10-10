@@ -14,6 +14,7 @@ namespace Converter {
             this.restrict = "E";
             this.scope = {
                 dest: "=",
+                ratio: "=",
                 source: "=",
                 text: "="
             };
@@ -26,12 +27,21 @@ namespace Converter {
     export class ConverterController {
         public dest: number;
         public source: number;
+        public ratio: number;
         public text: string;
 
-        public convert():void {
-            if (this.source > 0) {
-                this.source--;
-                this.dest++;
+        public convert() {
+            let sourceRatio = this.ratio && this.ratio > 0 ? this.ratio : 1;
+            let destRatio = 1;
+
+            if (sourceRatio < 1) {
+                destRatio = sourceRatio / 1;
+                sourceRatio = 1;
+            }
+
+            if (this.source >= sourceRatio) {
+                this.source -= sourceRatio;
+                this.dest += destRatio;
             }
         }
     }
