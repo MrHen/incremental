@@ -1,11 +1,6 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
-module Generator {
-    var app = angular
-        .module("incremental.generator", [])
-        .directive('generator', () => new GeneratorDirective())
-        .controller("GeneratorController", GeneratorController);
-
+namespace Generator {
     export class GeneratorDirective implements ng.IDirective {
         public templateUrl: string;
         public restrict: string;
@@ -15,8 +10,8 @@ module Generator {
         public bindToController: boolean;
 
         constructor () {
-            this.templateUrl = 'directives/generator/generator.html';
-            this.restrict = 'E';
+            this.templateUrl = "directives/generator/generator.html";
+            this.restrict = "E";
             this.scope = {
                 text: "=",
                 value: "="
@@ -31,8 +26,13 @@ module Generator {
         public text: string;
         public value: number;
 
-        public generate() {
+        public generate():void {
             this.value++;
         }
     }
+
+    angular
+        .module("incremental.generator", [])
+        .directive("generator", () => new GeneratorDirective())
+        .controller("GeneratorController", GeneratorController);
 }
