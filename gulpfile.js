@@ -100,8 +100,8 @@ gulp.task('clean:tsd', function (callback) {
 // Watch
 ////////
 
-gulp.task('watch', ['build:app'], function() {
-    return gulp.watch(locations.sources, configs.watcher, ['build:app'])
+gulp.task('watch', ['build'], function() {
+    return gulp.watch(locations.sources, configs.watcher, ['build'])
         .on('change', function (event) {
             gulp_util.log("[" + gulp_util.colors.cyan("watch") + "]", 'File ' + event.path + ' was ' + event.type);
         });
@@ -126,36 +126,56 @@ gulp.task('build:app:copy', function() {
 
 var tsProject = gulp_typescript.createProject(configs.typescript);
 
-gulp.task('build:app:typescript', ['build:tsd'], function () {
+gulp.task('build:app:typescript', ['build:tsd'], function (callback) {
     var tsFilter = gulp_filter(locations.filters.typescript); // non-test TypeScript files
 
+    var errors = null;
     var tsResult = gulp.src(locations.sources)
         .pipe(gulp_changed(locations.output, {extension: '.js'}))
         .pipe(tsFilter)
-        .pipe(gulp_typescript(tsProject));
+        .pipe(gulp_typescript(tsProject))
+        .on('error', function(e) {
+            errors = e;
+        })
+        .on('end', function() {
+            if (errors) {
+                callback(errors);
+            }
+        });
 
-    return tsResult.js.pipe(gulp.dest(locations.output));
+    tsResult.js.pipe(gulp.dest(locations.output))
+        .on('end', function() {
+            if (!errors) {
+                callback();
+            }
+        });
 });
 
 gulp.task('build:test', ['build:test:typescript'], function() {});
 
-gulp.task('build:test:typescript', ['build:tsd', 'build:app'], function () {
+gulp.task('build:test:typescript', ['build:tsd', 'build:app'], function (callback) {
     var tsTestFilter = gulp_filter(locations.filters.typescriptTests);
 
-    var errors = false;
+    var errors = null;
     var tsResult = gulp.src(locations.sources)
+        .pipe(gulp_changed(locations.output))
         .pipe(tsTestFilter)
         .pipe(gulp_typescript(configs.typescript))
-        .on('error', function() {
-            errors = true;
+        .on('error', function(e) {
+            errors = e;
         })
         .on('end', function() {
             if (errors) {
-                process.exit(1);
+                callback(errors);
             }
         });
 
-    return tsResult.js.pipe(gulp.dest(locations.output));
+    tsResult.js.pipe(gulp.dest(locations.output))
+        .on('end', function() {
+            if (!errors) {
+                callback();
+            }
+        });
 });
 
 gulp.task('build:bower', function () {
@@ -184,7 +204,9 @@ gulp.task('build:app:inject:bower', ['build:bower', 'build:app:copy'], function(
 // Lint
 ///////
 
-gulp.task('lint', function () {
+gulp.task('lint', ['lint:typescript'], function () {});
+
+gulp.task('lint:typescript', ['build:app'], function () {
     var tsFilter = gulp_filter(locations.filters.typescript);
 
     return gulp.src(locations.sources)
@@ -199,7 +221,7 @@ gulp.task('lint', function () {
 
 gulp.task('start', ['start:app'], function() {});
 
-gulp.task('start:app', ['build:app'], function() {
+gulp.task('start:app', ['build'], function() {
     gulp_nodemon({
         script: locations.start,
         env: {
@@ -216,7 +238,7 @@ gulp.task('start:app', ['build:app'], function() {
 
 gulp.task('deploy', ['deploy:ghpages'], function() {});
 
-gulp.task('deploy:ghpages', ['build:app', 'test:run'], function() {
+gulp.task('deploy:ghpages', ['build', 'test', 'lint'], function() {
     return gulp.src(locations.deploy)
         .pipe(gulp_gh_pages());
 });
@@ -227,7 +249,7 @@ gulp.task('deploy:ghpages', ['build:app', 'test:run'], function() {
 
 gulp.task('test', ['test:run'], function() {});
 
-gulp.task('test:run', ['build:app', 'build:test'], function() {
+gulp.task('test:run', ['build', 'build:test'], function() {
     return gulp.src([locations.test])
         .pipe(gulp_spawn_mocha(configs.mocha));
 });
