@@ -1,5 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
+/* tslint:disable:no-console */
+
 import * as express from "express";
 import * as http from "http";
 
