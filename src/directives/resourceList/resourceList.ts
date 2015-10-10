@@ -1,11 +1,6 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
-module ResourceList {
-    var app = angular
-        .module("incremental.resourceList", [])
-        .directive('resourcelist', () => new ResourceListDirective())
-        .controller("ResourceListController", ResourceListController);
-
+namespace ResourceList {
     export class ResourceListDirective implements ng.IDirective {
         public templateUrl: string;
         public restrict: string;
@@ -15,8 +10,8 @@ module ResourceList {
         public bindToController: boolean;
 
         constructor () {
-            this.templateUrl = 'directives/resourceList/resourceList.html';
-            this.restrict = 'E';
+            this.templateUrl = "directives/resourceList/resourceList.html";
+            this.restrict = "E";
             this.scope = {
                 resources: "="
             };
@@ -29,4 +24,9 @@ module ResourceList {
     export class ResourceListController {
         public resources: {[resource:string]:number};
     }
+
+    angular
+        .module("incremental.resourceList", [])
+        .directive("resourcelist", () => new ResourceListDirective())
+        .controller("ResourceListController", ResourceListController);
 }
