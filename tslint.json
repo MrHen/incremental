@@ -37,7 +37,7 @@
       "trace"
     ],
     "no-construct": true,
-    "no-constructor-vars": true,
+    "no-constructor-vars": false,
     "no-debugger": true,
     "no-duplicate-key": true,
     "no-shadowed-variable": true,
@@ -83,7 +83,7 @@
       "property-declaration": "nospace",
       "variable-declaration": "nospace"
     }],
-    "use-strict": [true,
+    "use-strict": [false,
       "check-module",
       "check-function"
     ],
@@ -92,8 +92,7 @@
       "check-branch",
       "check-decl",
       "check-operator",
-      "check-separator",
-      "check-type"
+      "check-separator"
     ]
   }
 }
