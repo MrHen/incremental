@@ -8,6 +8,7 @@ var gulp_inject = require('gulp-inject');
 var gulp_filter = require("gulp-filter");
 var gulp_spawn_mocha = require('gulp-spawn-mocha');
 var gulp_tsd = require('gulp-tsd');
+var gulp_tslint = require('gulp-tslint');
 var gulp_typescript = require('gulp-typescript');
 var gulp_util = require('gulp-util');
 var gulp_nodemon = require('gulp-nodemon');
@@ -30,6 +31,12 @@ var configs = {
     tsd: {
         command: 'reinstall',
         config: 'tsd.json'
+    },
+
+    tslint: {
+        configuration: __dirname + '/tslint.json',
+        emitError: true,
+        reportLimit: 3
     },
 
     typescript: {
@@ -61,7 +68,8 @@ var locations = {
 
     filters: {
         copy: ['**/*.{html,css}'],
-        typescript: ['**/*.ts', '!**/*.spec.ts']
+        typescript: ['**/*.ts', '!**/*.spec.ts'],
+        typescriptTests: ['**/*.spec.ts']
     },
 
     watch: {
@@ -143,7 +151,7 @@ gulp.task('build:test', ['build:tsd', 'build:app'], function(callback) {
 });
 
 gulp.task('build:test:typescript', function () {
-    var tsTestFilter = gulp_filter('**/*.spec.ts');
+    var tsTestFilter = gulp_filter(locations.filters.typescriptTests);
 
     var errors = false;
     var tsResult = gulp.src(locations.sources)
@@ -183,6 +191,19 @@ gulp.task('build:inject:bower', function() {
     return gulp.src(locations.inject.src)
         .pipe(gulp_inject(gulp.src(main_bower_files(), {read: false}), configs.inject.bower))
         .pipe(gulp.dest(locations.inject.dest));
+});
+
+///////
+// Lint
+///////
+
+gulp.task('lint', function () {
+    var tsFilter = gulp_filter(locations.filters.typescript);
+
+    return gulp.src(locations.sources)
+        .pipe(tsFilter)
+        .pipe(gulp_tslint(configs.tslint))
+        .pipe(gulp_tslint.report('prose'));
 });
 
 //////
