@@ -1,11 +1,6 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
-module Converter {
-    var app = angular
-        .module("incremental.converter", [])
-        .directive('converter', () => new ConverterDirective())
-        .controller("ConverterController", ConverterController);
-
+namespace Converter {
     export class ConverterDirective implements ng.IDirective {
         public templateUrl: string;
         public restrict: string;
@@ -15,12 +10,12 @@ module Converter {
         public bindToController: boolean;
 
         constructor () {
-            this.templateUrl = 'directives/converter/converter.html';
-            this.restrict = 'E';
+            this.templateUrl = "directives/converter/converter.html";
+            this.restrict = "E";
             this.scope = {
-                text: "=",
+                dest: "=",
                 source: "=",
-                dest: "="
+                text: "="
             };
             this.controller = ConverterController;
             this.controllerAs = "vm";
@@ -29,15 +24,20 @@ module Converter {
     }
 
     export class ConverterController {
-        public text: string;
-        public source: number;
         public dest: number;
+        public source: number;
+        public text: string;
 
-        public convert() {
+        public convert():void {
             if (this.source > 0) {
                 this.source--;
                 this.dest++;
             }
         }
     }
+
+    angular
+        .module("incremental.converter", [])
+        .directive("converter", () => new ConverterDirective())
+        .controller("ConverterController", ConverterController);
 }

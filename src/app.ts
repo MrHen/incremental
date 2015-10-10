@@ -1,15 +1,16 @@
 /// <reference path="../typings/tsd.d.ts" />
 
-import express = require('express');
-import http = require('http');
+/* tslint:disable:no-console */
 
-var app = express();
+import * as express from "express";
+import * as http from "http";
 
-app.use(express.static('app'));
+let app:express.Express = express();
+app.use(express.static("app"));
 
-var server = http.createServer(app);
-var server_config = { port: 4000 };
+let server:http.Server = http.createServer(app);
+let server_config:{port:number} = { port: 4000 };
 
 server.listen(server_config.port, () => {
-    console.info('Express server listening', {port: server_config.port});
+    console.info("Express server listening", {port: server_config.port});
 });

@@ -1,8 +1,8 @@
 /// <reference path="../../typings/tsd.d.ts" />
 
-var app = angular
+angular
     .module("incremental.directives", [
-        'incremental.converter',
-        'incremental.generator',
-        'incremental.resourceList'
+        "incremental.converter",
+        "incremental.generator",
+        "incremental.resourceList"
     ]);
