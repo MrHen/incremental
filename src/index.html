@@ -17,31 +17,32 @@
 </head>
 <body class="container-fluid" ng-controller="IncrementalController">
 
-<h1>Basics</h1>
-<div class="row">
-    <div class="col-md-8">
-        <resourceList resources="resources"></resourceList>
-    </div>
-</div>
+    <h1>Basics</h1>
+    <div class="row">
+        <div class="col-sm-4">
+            <resourceList resources="resources"></resourceList>
+        </div>
 
-<div class="row">
-    <div class="col-sm-6">
-        <table class="table table-bordered table-condensed">
-            <tr>
-                <th>Action</th>
-                <th>Effect</th>
-            </tr>
-            <tr>
-                <td><generator text="'collect'" value="resources.scrap"></generator></td>
-                <td>+1 Scrap</td>
-            </tr>
-            <tr ng-repeat="converter in converters">
-                <td><converter text="converter.name" data="resources" source="converter.cost" dest="converter.gain"></converter></td>
-                <td ng-bind="converter.description"></td>
-            </tr>
-        </table>
+        <div class="col-sm-6">
+
+            <div class="panel panel-default">
+                <table class="table table-bordered table-condensed">
+                    <tr>
+                        <th>Action</th>
+                        <th>Effect</th>
+                    </tr>
+                    <tr>
+                        <td><generator text="'collect'" value="resources.scrap"></generator></td>
+                        <td>+1 Scrap</td>
+                    </tr>
+                    <tr ng-repeat="converter in converters">
+                        <td><converter text="converter.name" data="resources" source="converter.cost" dest="converter.gain"></converter></td>
+                        <td>{{converter.description}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
 
 </body>
 </html>

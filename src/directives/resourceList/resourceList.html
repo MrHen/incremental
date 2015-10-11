@@ -1,10 +1,16 @@
-<table class="table table-bordered">
-    <tr>
-        <th>Resource</th>
-        <th>Owned</th>
-    </tr>
-    <tr ng-repeat="(key, value) in vm.resources">
-        <td class="lead">{{key}}</td>
-        <td class="lead">{{value}}</td>
-    </tr>
-</table>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">Available resources</div>
+    </div>
+
+    <table class="table table-bordered">
+        <tr class="resource-list-labels">
+            <th>Resource</th>
+            <th>Owned</th>
+        </tr>
+        <tr ng-repeat="(key, value) in vm.resources">
+            <td class="lead">{{key}}</td>
+            <td class="lead">{{value}}</td>
+        </tr>
+    </table>
+</div>
