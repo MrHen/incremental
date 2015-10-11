@@ -7,7 +7,6 @@ namespace IncrementalApp {
         converters: {
             cost:Converter.ConverterAmount[];
             description:string;
-            gain:Converter.ConverterAmount[];
             name:string;
         }[];
 
@@ -26,27 +25,28 @@ namespace IncrementalApp {
 
             this.$scope.converters = [
                 {
-                    cost: [{resource: "scrap", count: 2}],
+                    cost: [{resource: "scrap", count: 1}],
+                    description: "+1 Scrap",
+                    name: "collect"
+                },
+                {
+                    cost: [{resource: "scrap", count: -2}, {resource: "junk", count: 1}],
                     description: "-2 Scrap, +1 Junk",
-                    gain: [{resource: "junk", count: 1}],
                     name: "convert"
                 },
                 {
-                    cost: [{resource: "junk", count: 5}],
+                    cost: [{resource: "junk", count: -5}, {resource: "scrapbot", count: 1}],
                     description: "-5 Junk, +1 Scrapbot",
-                    gain: [{resource: "scrapbot", count: 1}],
                     name: "build"
                 },
                 {
-                    cost: [{resource: "scrapbot", count: 1}],
+                    cost: [{resource: "scrapbot", count: -1}, {resource: "coal", count: 3}],
                     description: "-1 Scrapbot, +3 Coal",
-                    gain: [{resource: "coal", count: 3}],
                     name: "mine"
                 },
                 {
-                    cost: [{resource: "scrapbot", count: 1}, {resource: "coal", count: 5}],
+                    cost: [{resource: "scrapbot", count: -1}, {resource: "coal", count: -5}, {resource: "scrap", count: 30}],
                     description: "-1 Scrapbot, -5 Coal, +30 Scrap",
-                    gain: [{resource: "scrap", count: 30}],
                     name: "gather"
                 }
             ];

@@ -23,7 +23,6 @@ namespace Converter {
             this.restrict = "E";
             this.scope = {
                 data: "=",
-                dest: "=",
                 source: "=",
                 text: "="
             };
@@ -35,12 +34,11 @@ namespace Converter {
 
     export class ConverterController {
         public data: ConverterData;
-        public dest: ConverterAmount[];
         public source: ConverterAmount[];
         public text: string;
 
         public convert() {
-            let rejected = _.reject(this.source, source => this.data[source.resource] >= source.count);
+            let rejected = _.reject(this.source, source => (this.data[source.resource] || 0) + source.count >= 0);
 
             // TODO real warning system
             if (!_.isEmpty(rejected)) {
@@ -48,8 +46,7 @@ namespace Converter {
                 return;
             }
 
-            _.each(this.source, source => this.data[source.resource] = (this.data[source.resource] || 0) - source.count);
-            _.each(this.dest, dest => this.data[dest.resource] = (this.data[dest.resource] || 0) + dest.count);
+            _.each(this.source, source => this.data[source.resource] = (this.data[source.resource] || 0) + source.count);
         }
     }
 

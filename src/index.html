@@ -31,12 +31,8 @@
                         <th>Action</th>
                         <th>Effect</th>
                     </tr>
-                    <tr>
-                        <td><generator text="'collect'" value="resources.scrap"></generator></td>
-                        <td>+1 Scrap</td>
-                    </tr>
                     <tr ng-repeat="converter in converters">
-                        <td><converter text="converter.name" data="resources" source="converter.cost" dest="converter.gain"></converter></td>
+                        <td><converter text="converter.name" data="resources" source="converter.cost"></converter></td>
                         <td>{{converter.description}}</td>
                     </tr>
                 </table>
