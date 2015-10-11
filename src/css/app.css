@@ -1,3 +1,7 @@
 body {
     background-color: gray;
 }
+
+.resource-list-labels {
+    display: none;
+}
