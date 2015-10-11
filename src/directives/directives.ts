@@ -3,6 +3,5 @@
 angular
     .module("incremental.directives", [
         "incremental.converter",
-        "incremental.generator",
         "incremental.resourceList"
     ]);
