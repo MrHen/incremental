@@ -11,6 +11,8 @@ namespace IncrementalApp {
         }[];
 
         resources: DataStore.DataSnapshot;
+
+        save: () => any;
     }
 
     export class IncrementalController {
@@ -22,6 +24,21 @@ namespace IncrementalApp {
                 "junk": 0,
                 "scrapbot": 0
             };
+
+            console.log('starting main');
+            this.dataStore.getCurrent()
+                .then((result) => {
+                          console.log('resolved data', result);
+                          if (_.isEmpty(result)) {
+                              return this.dataStore.setCurrent(starterKit);
+                          } else {
+                              return result;
+                          }
+                      })
+                .then((result) => {
+                          console.log('resolved default', result);
+                          this.$scope.resources = result;
+                      });
 
             this.$scope.converters = [
                 {
@@ -45,17 +62,19 @@ namespace IncrementalApp {
                     name: "mine"
                 },
                 {
-                    cost: [{resource: "scrapbot", count: -1}, {resource: "coal", count: -5}, {resource: "scrap", count: 30}],
+                    cost: [{resource: "scrapbot", count: -1},
+                        {resource: "coal", count: -5},
+                        {resource: "scrap", count: 30}],
                     description: "-1 Scrapbot, -5 Coal, +30 Scrap",
                     name: "gather"
                 }
             ];
 
-            if (_.isEmpty(this.dataStore.current)) {
-                this.dataStore.current = starterKit;
-            }
+            this.$scope.save = this.save;
+        }
 
-            this.$scope.resources = this.dataStore.current;
+        private save = () => {
+            this.dataStore.setCurrent(this.$scope.resources);
         }
     }
 
