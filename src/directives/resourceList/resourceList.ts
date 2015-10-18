@@ -1,6 +1,12 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
 namespace ResourceList {
+    export interface ResourceData {[resource:string]:number}
+
+    export interface ResourceDeltas {
+        [resource:string]: (tick:number) => number
+    }
+
     export class ResourceListDirective implements ng.IDirective {
         public templateUrl: string;
         public restrict: string;
@@ -13,6 +19,8 @@ namespace ResourceList {
             this.templateUrl = "directives/resourceList/resourceList.html";
             this.restrict = "E";
             this.scope = {
+                deltas: "=",
+                tick: "=",
                 resources: "="
             };
             this.controller = ResourceListController;
@@ -22,7 +30,14 @@ namespace ResourceList {
     }
 
     export class ResourceListController {
-        public resources: {[resource:string]:number};
+        public deltas: ResourceDeltas;
+        public tick: number;
+        public resources: ResourceData;
+
+        public effectiveValue(resource:string) {
+            console.log('resource list effective value', resource);
+            return this.resources[resource] + (this.deltas && this.deltas[resource] ? this.deltas[resource](this.tick) : 0);
+        }
     }
 
     angular

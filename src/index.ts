@@ -1,5 +1,6 @@
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="./directives/converter/converter.ts" />
+/// <reference path="./directives/resourceList/resourceList.ts" />
 /// <reference path="./services/dataStore/dataStore.service.ts" />
 /// <reference path="./services/ticker/ticker.service.ts" />
 
@@ -10,6 +11,8 @@ namespace IncrementalApp {
             description:string;
             name:string;
         }[];
+
+        deltas: ResourceList.ResourceDeltas,
 
         resources: DataStore.DataSnapshot;
         snapshotTime: Date;
@@ -71,8 +74,20 @@ namespace IncrementalApp {
                         {resource: "scrap", count: 30}],
                     description: "-1 Scrapbot, -5 Coal, +30 Scrap",
                     name: "gather"
+                },
+                {
+                    cost: [{resource: "scrapbot", count: -10},
+                        {resource: "autobot", count: 1}],
+                    description: "-10 Scrapbot, +1 Autobot",
+                    name: "upgrade"
                 }
             ];
+
+            this.$scope.deltas = {
+                'scrap': (tick:number) => {
+                    return this.$scope.resources['autobot'] * tick || 0;
+                }
+            };
 
             this.$scope.save = this.save;
             this.$scope.ticker = this.ticker.data;

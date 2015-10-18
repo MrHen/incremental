@@ -11,6 +11,7 @@
         <tr ng-repeat="(key, value) in vm.resources">
             <td class="lead">{{key}}</td>
             <td class="lead">{{value}}</td>
+            <td class="lead" ng-bind="vm.effectiveValue(key)"></td>
         </tr>
     </table>
 </div>
