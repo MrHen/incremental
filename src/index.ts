@@ -1,6 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="./directives/converter/converter.ts" />
 /// <reference path="./services/dataStore/dataStore.service.ts" />
+/// <reference path="./services/ticker/ticker.service.ts" />
 
 namespace IncrementalApp {
     export interface IncrementalScope {
@@ -11,14 +12,15 @@ namespace IncrementalApp {
         }[];
 
         resources: DataStore.DataSnapshot;
+        ticker: Ticker.TickerInterface;
 
         save: () => any;
     }
 
     export class IncrementalController {
-        public static $inject:string[] = ["$scope", "dataStore"];
+        public static $inject:string[] = ["$scope", "dataStore", "ticker"];
 
-        constructor(private $scope:IncrementalScope, private dataStore:DataStore.DataStoreService) {
+        constructor(private $scope:IncrementalScope, private dataStore:DataStore.DataStoreService, private ticker:Ticker.TickerServiceInterface) {
             let starterKit:DataStore.DataSnapshot = {
                 "scrap": 2,
                 "junk": 0,
@@ -71,6 +73,7 @@ namespace IncrementalApp {
             ];
 
             this.$scope.save = this.save;
+            this.$scope.ticker = this.ticker.data;
         }
 
         private save = () => {

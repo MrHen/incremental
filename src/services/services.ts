@@ -2,5 +2,6 @@
 
 angular
     .module("incremental.services", [
-        "incremental.dataStore"
+        "incremental.dataStore",
+        "incremental.ticker"
     ]);
