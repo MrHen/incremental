@@ -8,15 +8,25 @@ namespace DataStore {
     export interface DataStoreServiceInterface {
         getCurrent: () => ng.IPromise<DataSnapshot>;
         setCurrent: (value:DataSnapshot) => ng.IPromise<DataSnapshot>;
+
+        getCurrentDate: () => ng.IPromise<Date>;
+        setCurrentDate: (value:Date) => ng.IPromise<Date>;
+
+        getStart: () => ng.IPromise<Date>;
+        setStart: (value:Date) => ng.IPromise<Date>;
     }
 
     interface DataStoreScope {
         current: DataSnapshot;
+        currentDate: Date;
+        start: Date;
     }
 
     export class DataStoreService implements DataStoreServiceInterface {
         private cache:DataStoreScope = {
-            current: {}
+            current: {},
+            currentDate: null,
+            start: null
         };
 
         private promise:ng.IPromise<DataStoreScope> = null;
@@ -42,10 +52,36 @@ namespace DataStore {
                 return this.cache.current = result;
             });
         }
+
+        public getCurrentDate():ng.IPromise<Date> {
+            return this.service.getCurrentDate().then((result) => {
+                return this.cache.currentDate = result;
+            });
+        }
+
+        public setCurrentDate(value:Date):ng.IPromise<Date> {
+            return this.service.setCurrentDate(value).then((result) => {
+                return this.cache.currentDate = result;
+            });
+        }
+
+        public getStart():ng.IPromise<Date> {
+            return this.service.getStart().then((result) => {
+                return this.cache.start = result; // TODO maybe should be angular.extend?
+            });
+        }
+
+        public setStart(value:Date):ng.IPromise<Date> {
+            return this.service.setStart(value).then((result) => {
+                return this.cache.start = result;
+            });
+        }
     }
 
     export class MemoryDataStoreService implements DataStoreServiceInterface {
         private current:DataSnapshot = {};
+        private currentDate:Date = null;
+        private start:Date = null;
 
         public static $inject:string[] = ["$q"];
 
@@ -60,11 +96,27 @@ namespace DataStore {
             this.current = angular.copy(value);
             return this.getCurrent();
         }
+
+        public getCurrentDate():ng.IPromise<Date> {
+            return this.$q.when(this.currentDate);
+        }
+
+        public setCurrentDate(value:Date):ng.IPromise<Date> {
+            this.currentDate = value;
+            return this.getCurrentDate();
+        }
+
+        public getStart():ng.IPromise<Date> {
+            return this.$q.when(this.start);
+        }
+
+        public setStart(value:Date):ng.IPromise<Date> {
+            this.start = angular.copy(value);
+            return this.getStart();
+        }
     }
 
     export class LocalDataStoreService implements DataStoreServiceInterface {
-        private current:DataSnapshot = {};
-
         public static $inject:string[] = ["$q", "localStorageService"];
 
         constructor(private $q:ng.IQService, private localStorageService:ng.local.storage.ILocalStorageService) {
@@ -77,6 +129,26 @@ namespace DataStore {
         public setCurrent(value:DataSnapshot):ng.IPromise<DataSnapshot> {
             this.localStorageService.set('current', value);
             return this.getCurrent();
+        }
+
+        public getCurrentDate():ng.IPromise<Date> {
+            let currentDate:string = this.localStorageService.get<string>('currentDate');
+            return this.$q.when(currentDate ? new Date(currentDate) : currentDate);
+        }
+
+        public setCurrentDate(value:Date):ng.IPromise<Date> {
+            this.localStorageService.set('currentDate', value);
+            return this.getCurrentDate();
+        }
+
+        public getStart():ng.IPromise<Date> {
+            let start:string = this.localStorageService.get<string>('start');
+            return this.$q.when(start ? new Date(start) : start);
+        }
+
+        public setStart(value:Date):ng.IPromise<Date> {
+            this.localStorageService.set('start', value);
+            return this.getStart();
         }
     }
 

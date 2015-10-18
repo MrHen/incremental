@@ -6,8 +6,18 @@ namespace Converter {
         count:number;
     }
 
-    export interface ConverterData {
+    export interface ConverterResources {
         [resource:string]: number;
+    }
+
+    export interface ConverterData {
+        data: ConverterResources,
+        name: string,
+        source: ConverterAmount[]
+    }
+
+    export interface ConverterDataScope extends ng.IScope {
+        vm: ConverterData;
     }
 
     export class ConverterDirective implements ng.IDirective {
@@ -23,8 +33,8 @@ namespace Converter {
             this.restrict = "E";
             this.scope = {
                 data: "=",
-                source: "=",
-                text: "="
+                name: "=",
+                source: "="
             };
             this.controller = ConverterController;
             this.controllerAs = "vm";
@@ -33,9 +43,14 @@ namespace Converter {
     }
 
     export class ConverterController {
-        public data: ConverterData;
+        public data: ConverterResources;
         public source: ConverterAmount[];
-        public text: string;
+        public name: string;
+
+        public static $inject:string[] = ["$scope"];
+
+        constructor(private $scope:ConverterDataScope) {
+        }
 
         public convert() {
             let rejected = _.reject(this.source, source => (this.data[source.resource] || 0) + source.count >= 0);
@@ -47,6 +62,7 @@ namespace Converter {
             }
 
             _.each(this.source, source => this.data[source.resource] = (this.data[source.resource] || 0) + source.count);
+            this.$scope.$emit('convert', {name: this.name});
         }
     }
 

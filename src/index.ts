@@ -4,7 +4,7 @@
 /// <reference path="./services/ticker/ticker.service.ts" />
 
 namespace IncrementalApp {
-    export interface IncrementalScope {
+    export interface IncrementalScope extends ng.IScope {
         converters: {
             cost:Converter.ConverterAmount[];
             description:string;
@@ -12,6 +12,8 @@ namespace IncrementalApp {
         }[];
 
         resources: DataStore.DataSnapshot;
+        snapshotTime: Date;
+
         ticker: Ticker.TickerInterface;
 
         save: () => any;
@@ -74,11 +76,36 @@ namespace IncrementalApp {
 
             this.$scope.save = this.save;
             this.$scope.ticker = this.ticker.data;
+
+            this.$scope.$on('convert', (result, args) => {
+                this.$scope.snapshotTime = new Date();
+                this.$scope.save();
+            });
+
+            this.dataStore.getStart()
+                .then((result) => {
+                          console.log('resolved start', result);
+                          if (!result) {
+                              return this.dataStore.setStart(new Date());
+                          } else {
+                              return result;
+                          }
+                      })
+                .then((result) => {
+                          console.log('resolved start post-default', result);
+                          this.ticker.start(result);
+                      });
+
+            this.dataStore.getCurrentDate()
+                .then((result) => {
+                         this.$scope.snapshotTime = result;
+                      });
         }
 
         private save = () => {
             this.dataStore.setCurrent(this.$scope.resources);
-        }
+            this.dataStore.setCurrentDate(this.$scope.snapshotTime);
+        };
     }
 
     angular
